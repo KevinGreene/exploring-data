@@ -1,6 +1,5 @@
 (ns exploring-data.intro)
 
-
 ;; Use def to define a symbol
 
 ;; Numbers
@@ -60,6 +59,10 @@
 ;; Map applies a given function to a given sequence
 (map mod3 numbers)
 
+(reduce (fn [a b] (+ a b)) numbers)
+
+(frequencies numbers)
+
 ;; Predicate functions evaluate truth. Conventionally they end in a ?
 (defn divisible-by-3? [x]
   (= 0 (mod3 x)))
@@ -70,4 +73,55 @@
 
 (partition-by divisible-by-3? numbers)
 
-;; Tons more. Read core.clj!
+;; Make more interesting sequences
+
+(def just-x (repeat "x"))
+
+(def one-through-ten (range 1 11))
+
+(def even-numbers (range 0 100 2))
+
+(def probably-1-vec [1 1 1 1 1 1 1 1 1 2])
+
+(defn probably-1 []
+  (take 1 (shuffle probably-1-vec)))
+
+(def mostly-1-sec (repeatedly probably-1))
+
+(def powers-of-2 (iterate #(* 2 %) 1))
+
+;; Most data we've worked with is one dimensional
+;; To work with real data, we probably need maps
+
+(def presenter {:first "Kevin" :last "Greene"})
+
+(:first presenter)
+
+(keys presenter)
+
+;; Modify key-values with assoc and dissoc.
+;; Note - This doesn't change the value of presenter
+
+(assoc presenter :city "Grand Rapids")
+
+(def presenter-with-favorites (assoc presenter :favorites {}))
+
+(assoc-in presenter-with-favorites [:favorites :language] "Clojure")
+
+(defn make-rectangle []
+  {:height (inc  (rand-int 10))
+   :width (inc (rand-int 10))})
+
+(def rectangles (repeatedly make-rectangle))
+
+(def rectangles-100 (take 100 rectangles))
+
+(defn combine-rectangles [rect1 rect2]
+  {:height (+ (:height rect1) (:height rect2))
+   :width (+ (:width rect1) (:width rect2))})
+
+(def wider-than-tall
+  (let [{:keys [height width]} (reduce combine-rectangles rectangles-100)]
+    (< height width)))
+
+;; Tons more. Read core.clj
