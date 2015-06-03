@@ -9,3 +9,6 @@
 ;; Incanter graphs are often hidden behind the editor
 
 (view (histogram (sample-normal 1000)))
+
+(with-open [r (clojure.java.io/reader "bgg.csv")]
+  (count (line-seq r)))
