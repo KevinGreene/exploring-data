@@ -8,4 +8,6 @@
                  [enlive "1.1.5"]
                  [clj-http "1.1.2"]
                  [cheshire "5.5.0"]
-                 [incanter "1.9.0"]])
+                 [org.clojure/data.csv "0.1.2"]
+                 [criterium "0.4.3"]
+                 [incanter "1.5.6"]])

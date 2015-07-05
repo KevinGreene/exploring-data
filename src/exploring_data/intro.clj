@@ -21,10 +21,6 @@
 
 (first q)
 
-(first (first q))
-
-(ffirst q)
-
 (nth q 1)
 
 (take 2 q)
@@ -69,6 +65,7 @@
 
 (filter divisible-by-3? numbers)
 
+;; Add syntax for non-divisible
 (partition 4 numbers)
 
 (partition-by divisible-by-3? numbers)
@@ -86,7 +83,10 @@
 (defn probably-1 []
   (take 1 (shuffle probably-1-vec)))
 
-(def mostly-1-sec (repeatedly probably-1))
+(def mostly-1-seq (repeatedly probably-1))
+
+(fn [a]
+  (* 2 a))
 
 (def powers-of-2 (iterate #(* 2 %) 1))
 
@@ -108,8 +108,7 @@
 
 (assoc-in presenter-with-favorites [:favorites :language] "Clojure")
 
-(defn make-rectangle []
-  {:height (inc  (rand-int 10))
+(defn make-rectangle []  {:height (inc (rand-int 10))
    :width (inc (rand-int 10))})
 
 (def rectangles (repeatedly make-rectangle))

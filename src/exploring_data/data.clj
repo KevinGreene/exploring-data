@@ -4,6 +4,8 @@
             [clojure.xml :as xml]
             [clj-http.client :as client]
             [cheshire.core :as json]
+            [clojure.data.csv :as csv]
+            [clojure.java.io :as io]
             ))
 
 (defn make-rectangle []
@@ -36,17 +38,21 @@
 
 ;; Easier to just use writer .newLine
 ;; Currently still slow, digging into why
-(with-open [w (clojure.java.io/writer "big_test_output.csv")]
+(with-open [w (io/writer "big_test_output.csv")]
   (doseq [line (take 200000000 csv-rectangles)]
     (.write w line)
-    (.newLine w)
-    (print line)))
+    (.newLine w)))
 
 ;; Reading has similar analogies
 (def small-csv-results (slurp "test_output.csv"))
 
-(with-open [r (clojure.java.io/reader "test_output.csv")]
+(with-open [r (io/reader "big_test_output.csv")]
   (count (line-seq r)))
+
+;; Using clojure.data.csv makes things even simpler
+
+(with-open [r (io/reader "test_output.csv")]
+  (doall (csv/read-csv r)))
 
 ;; Rest APIs
 
@@ -120,7 +126,7 @@
          (str/join ";" themes) ","
          rating)))
 
-(with-open [w (clojure.java.io/writer "bgg.csv")]
+(with-open [w (io/writer "bgg.csv")]
   (doseq [line (map game-to-line (take 5000 games))]
     (.write w (str line))
     (.newLine w)

@@ -3,6 +3,17 @@
 The source code designed to accompany the workshop "Exploring Data With Clojure"
 for LambdaJam 2015.
 
+## Why
+
+Clojure is a great tool for exploring and analyzing data
+
+* Being based on the JVM, Clojure has access to a wealth of libraries
+* Being based on the JVM, Clojure has access to a wealth of distributed
+computing and tuning tools
+* The REPL allows for testing code as it is written and exploring the data
+* Boot allows you to create simple scripts
+
+
 ## Usage
 
 As of right now, load up the files in your favorite Editor + REPL, and have fun.
@@ -10,17 +21,39 @@ As of right now, load up the files in your favorite Editor + REPL, and have fun.
 I'd personally recommend Emacs, with a great start being available here:
 http://www.braveclojure.com/basic-emacs/
 
+
+# Alembic
+
+For exploring data, I'd also recommend editing your Leiningen profile,
+located at `~/.lein/profiles.clj` to include a dependency on `[alembic "0.3.2"]`
+
+This way, if you're ever in a REPL and want to add another library, you can run
+
+```
+(use '[alembic.still])
+(alembic.still/distill '[new.library "0.0.1"])
+```
+
+Or you can edit your project.clj file, and run
+
+```
+(use '[alembic.still])
+(alembic.still/load-project)
+```
+
+to reload the Leiningen project
+
 ## Guide
 
 Intro - Get acquainted with the very basics of Clojure, functions, and sequences
 
 Getting Data - How to load data from files and the web
 
-Math! - Using core.matrix
+Math - Using core.matrix
 
-Pictures! - Using Incanter
+Pictures - Using Incanter
 
-Production! - Using Storm / Onyx
+Production - Using Storm / Onyx
 
 Case Studies:
 
