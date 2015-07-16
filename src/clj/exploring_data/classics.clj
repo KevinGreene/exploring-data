@@ -1,6 +1,9 @@
 (ns exploring-data.classics
   (:require [opennlp.nlp :as nlp]
-            [opennlp.treebank :as treebank]))
+            [opennlp.treebank :as treebank]
+            [stemmers.core]
+            [stemmers.porter]
+            [incanter.stats :refer [levenshtein-distance]]))
 
 (defn get-text [name]
   (-> (str "resources/writings/" name ".txt")
@@ -47,7 +50,7 @@
 
 (comment
   ;; It's a fairly inexpensive function
-  ;; But can have some trouble with non-prose
+  ;; But can have some trouble with things that aren't prose
   (take 10 (get-sentences sherlock-text))
   )
 
@@ -84,6 +87,7 @@
 ;; Chunk tags can be found here: http://www.clips.ua.ac.be/pages/mbsp-tags
 (def chunker (treebank/make-treebank-chunker "resources/nlp_data/en-chunker.bin"))
 
+;; Function to check for various frequencies
 (defn get-frequency-wordtypes [text]
   (->> (tokenize text)
        (pos-tag)
@@ -96,6 +100,21 @@
   ;; Can't always trust pos-tag
   (meta (pos-tag (tokenize "Verbing nouns weirds language")))
 
+  ;; Try with various speech I've said, you've said, or random discussions
+  ;; Note: People get surprisingly defensive when you tell them they talk in a way
+  ;; that isn't parsed correctly
   (let [this-thing (chunker (pos-tag (tokenize "Some example speech patterns.")))
-        meta-thing (:probabilities (meta this-thing))] (map vector this-thing meta-thing))
+        meta-thing (:probabilities (meta this-thing))]
+    (map vector this-thing meta-thing))
+  )
+
+(comment
+  ;; We can use stemmers to get to the essence of the word
+  ;; Good for searching
+  (stemmers.core/stems (seq (take 10 (tokenize (apply str (take 5000 sherlock-text))))))
+
+  ;; We can use the levenshtein distance for similarities
+  ;; Good for typos
+
+  (levenshtein-distance "kitten" "mittens")
   )

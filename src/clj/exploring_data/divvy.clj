@@ -1,8 +1,11 @@
 (ns exploring-data.divvy
   [:require
    [clojure.data.csv :as csv]
-   [clojure.java.io :as io]]
-  [:use [incanter core datasets io charts stats latex svg pdf]])
+   [clojure.java.io :as io]
+   [clj-time.core :as clj-time]
+   [clj-time.coerce :as time-coerce]
+   [clj-time.format :as time-format]]
+  [:use [incanter core io charts stats latex svg pdf]])
 
 (def divvy-trip-location "resources/divvy/Divvy_Trips_2014_0615_0630.csv")
 
@@ -26,6 +29,8 @@
 
 (def station-data
   (read-dataset divvy-station-location :header true))
+
+(def divvy-date-formatter (time-format/formatter "MM/dd/yyyy HH:mm"))
 
 ;; Basic views and filters
 (comment
@@ -56,8 +61,10 @@
 
 ;; We'll define a generic set of Valid Data we can change
 ;; throughout the experience
-(def valid-data (query-dataset data {:bikeid {:$gt 0}
-                                     }))
+(def valid-data
+  (query-dataset data
+                 {:bikeid {:$gt 0}}))
+
 ;; Basic Plots and Graphs
 (comment
   (view valid-data)
@@ -66,11 +73,12 @@
   (def bike-2006-data (query-dataset valid-data {:bikeid 2006}))
 
   ;; Do older people ride longer or shorter on this bike?
-  (def bike-2006-scatter-plot(scatter-plot :birthyear :tripduration :data bike-2006-data))
+  (def bike-2006-scatter-plot (scatter-plot :birthyear :tripduration :data bike-2006-data))
 
   ;; View it
   (view bike-2006-scatter-plot)
 
+  
   ;; Save it as a PDF or SVG
   (save-pdf bike-2006-scatter-plot "bike_2006.pdf")
   (save-svg bike-2006-scatter-plot "bike_2006.svg")
@@ -82,7 +90,9 @@
     (query-dataset data {:bikeid bike-id}))
 
 
+  ;; Create a set of all bike-ids
   (def bike-ids (sort (get-categories :bikeid valid-data)))
+
   ;; Then make a slider for the data
   (sliders [bike-number bike-ids]
            ;; LOTS OF TABLES!
@@ -100,6 +110,9 @@
     (sliders [bike-number bike-ids]
              (set-data s-plot :birthyear :tripduration
                        (query-bike-data valid-data bike-number))))
+
+  ;; Make a slider that allows you to switch between different subscriber types
+  ;; For some sort of chart
   
   ;; View Trip Durations
   ;; Trim down valid-data for tripduration
@@ -108,6 +121,16 @@
   ;; What's the distribution of age?
   (view (histogram :birthyear :data valid-data))
 
+  ;; What about derived data?
+  ;; Let's define a helper function to convert the Divvy dates to longs
+  (defn date-string-to-long [date-string]
+    (time-coerce/to-long (time-format/parse divvy-date-formatter date-string)))
+
+  ;; We can add derived columns to create a more useful plot
+  (->> (add-derived-column :start-long [:starttime] date-string-to-long valid-data)
+       (scatter-plot :start-long :tripduration :data)
+       (view))
+  
   ;; How are male trip lengths distributed vs female riders
   (let [male-data (query-dataset valid-data {:gender "Male"})
         female-data (query-dataset valid-data {:gender "Female"})]
@@ -213,11 +236,19 @@
   (defn mps-to-mph [mps]
     (* (meters-to-miles mps) 60 60))
 
-  (->> (add-derived-column :mph [:speed] mps-to-mph speed-data)
-       (add-derived-column :distance-bucket [:distance] #(* (quot % 100) 100))
-       ($rollup :mean :mph :distance-bucket)
-       (scatter-plot :distance-bucket :mph :data)
-       (update-view! v))
+  ;; Adding most things together
+  (let [data (->> (add-derived-column :mph [:speed] mps-to-mph speed-data)
+                  (add-derived-column :distance-bucket [:distance] #(* (quot % 100) 100))
+                  ($rollup :mean :mph :distance-bucket))
+        chart (scatter-plot :distance-bucket :mph :data data)
+        x ($ :distance-bucket data)
+        y ($ :mph data)
+        ;; linear (linear-model y x)
+        ;; model (interpolate (map vector x y) :linear)
+        ]
+    
+    (view (add-lines chart x y))
+    )
 
 
   ;; Find the station that people get away from the fastest

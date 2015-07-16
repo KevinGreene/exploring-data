@@ -3,7 +3,7 @@
   :url "https://github.com/KevinGreene/exploring-data"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.7.0"]
+  :dependencies [[org.clojure/clojure "1.6.0"]
                  
                  ;; Accessing Data
                  [enlive "1.1.5"]
@@ -21,5 +21,6 @@
                  ;; Random useful tools
                  [stemmers "0.2.2"]
                  [org.clojure/tools.cli "0.2.4"]
-                 [criterium "0.4.3"]]
+                 [criterium "0.4.3"]
+                 [clj-time "0.10.0"]]
   :plugins [])

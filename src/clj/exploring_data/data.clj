@@ -8,6 +8,7 @@
             [clojure.java.io :as io]
             ))
 
+;; Let's define our random functions
 (defn make-rectangle []
   {:height (inc (rand-int 10))
    :width (inc (rand-int 10))})
@@ -20,7 +21,6 @@
 (def rectangles (repeatedly make-rectangle))
 
 (def rectangles-5 (take 5 rectangles))
-
 
 ;; CSVs
 
@@ -67,6 +67,8 @@
 
 ;; Keywords are converted to strings
 (def parsed-clojure-repos-keyword (json/decode clojure-repo-json-string true))
+
+;; What are all of the names of the Clojure Repositories?
 
 ;; XML
 
@@ -127,7 +129,7 @@
          rating)))
 
 (with-open [w (io/writer "bgg.csv")]
-  (doseq [line (map game-to-line (take 5000 games))]
+  (doseq [line (map game-to-line (take 50 games))]
     (.write w (str line))
     (.newLine w)
     ))
