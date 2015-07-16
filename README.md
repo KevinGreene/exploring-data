@@ -18,11 +18,13 @@ computing and tuning tools
 
 As of right now, load up the files in your favorite Editor + REPL, and have fun.
 
-I'd personally recommend Emacs, with a great start being available here:
-http://www.braveclojure.com/basic-emacs/
+I'd personally recommend Emacs, Cursive (an Intellij plugin), or NightCode
 
+## Suggestions
 
-# Alembic
+Random suggestions to ease your development
+
+#### Alembic
 
 For exploring data, I'd also recommend editing your Leiningen profile,
 located at `~/.lein/profiles.clj` to include a dependency on `[alembic "0.3.2"]`
@@ -43,25 +45,38 @@ Or you can edit your project.clj file, and run
 
 to reload the Leiningen project
 
+#### In-REPL Documentation
+
+Running
+
+```
+(use 'clojure.repl)
+```
+
+will give you access to all of the functions in the clojure.repl namespace, notably `doc`, which will print out documentation related to a function.
+
+#### Finding Data to Explore
+
+[Quora](http://www.quora.com/Where-can-I-find-large-datasets-open-to-the-public)
+
+[Reddit](https://www.reddit.com/r/datasets/top/?sort=top&t=all)
+
+[Github](http://vincentarelbundock.github.io/Rdatasets/datasets.html)
+
+[Kaggle](https://www.kaggle.com/)
+
+
 ## Guide
 
 Intro - Get acquainted with the very basics of Clojure, functions, and sequences
 
-Getting Data - How to load data from files and the web
+Data - How to load data from files and the web
 
-Math - Using core.matrix
+Divvy - Visualizing data from Divvy's Data Challenge
 
-Pictures - Using Incanter
+Monte Carlo - Using Incanter and core clojure functions to easily graph Monte Carlo simulations and results
 
-Production - Using Storm / Onyx
-
-Case Studies:
-
-Real Estate
-
-Divvy
-
-Board Game Geek (Bayesian probability with board games)
+Classics - Deconstructing natural works with OpenNLP and other language tools
 
 ## License
 
