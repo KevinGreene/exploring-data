@@ -1,7 +1,6 @@
 (ns exploring-data.incanter-datasets
   [:use [incanter core io charts stats datasets]])
 
-
 ;; Iris dataset
 ;; Sepal and Petal information
 ;; Which species have the largest?
@@ -58,5 +57,3 @@
 
 ;; Vote counts for 30 provinces from the 2009 Iranian election
 (def iran-election-data (get-dataset :iran-election))
-
-(view car-data)

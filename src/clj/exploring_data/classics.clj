@@ -51,7 +51,7 @@
 (comment
   ;; It's a fairly inexpensive function
   ;; But can have some trouble with things that aren't prose
-  (take 10 (get-sentences sherlock-text))
+  (take 100 (get-sentences sherlock-text))
   )
 
 ;; Parses strings (tokens) from a given text
@@ -73,7 +73,7 @@
   )
 
 ;; Tag a list of tokens with the presumed type
-;; Types can be found here:  http://www.clips.ua.ac.be/pages/mbsp-tags
+;; Types can be found here: http://www.clips.ua.ac.be/pages/mbsp-tags
 (def pos-tag (nlp/make-pos-tagger "resources/nlp_data/en-pos-maxent.bin"))
 
 (comment
@@ -103,7 +103,7 @@
   ;; Try with various speech I've said, you've said, or random discussions
   ;; Note: People get surprisingly defensive when you tell them they talk in a way
   ;; that isn't parsed correctly
-  (let [this-thing (chunker (pos-tag (tokenize "Some example speech patterns.")))
+  (let [this-thing (chunker (pos-tag (tokenize "So, we'll try a different example. In which we hope things are adequately complex.")))
         meta-thing (:probabilities (meta this-thing))]
     (map vector this-thing meta-thing))
   )

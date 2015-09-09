@@ -59,7 +59,8 @@
 (def clojure-repos-response
   (client/get "https://api.github.com/orgs/clojure/repos"))
 
-(def clojure-repo-json-string (:body clojure-repos-response))
+(def clojure-repo-json-string (
+                               :body clojure-repos-response))
 
 ;; JSON
 ;; Keywords are left as strings

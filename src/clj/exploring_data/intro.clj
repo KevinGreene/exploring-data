@@ -43,6 +43,10 @@
 
 (sort numbers)
 
+(-> (distinct numbers)
+    (sort)
+    (reverse))
+
 (concat numbers [10 11 12])
 
 (shuffle numbers)
@@ -72,6 +76,12 @@
 
 ;; Make more interesting sequences
 
+(let
+    [pairs (reverse (partition 2 2 (repeat nil) (shuffle  team-members)))]
+  (cons
+   (filter (complement nil?) (apply concat (take 2 pairs)))
+   (drop 2 pairs)))
+
 (def just-x (repeat "x"))
 
 (def one-through-ten (range 1 11))
@@ -85,6 +95,8 @@
 
 (def mostly-1-seq (repeatedly probably-1))
 
+
+;; Powers of two
 (fn [a]
   (* 2 a))
 
@@ -108,7 +120,8 @@
 
 (assoc-in presenter-with-favorites [:favorites :language] "Clojure")
 
-(defn make-rectangle []  {:height (inc (rand-int 10))
+(defn make-rectangle []
+  {:height (inc (rand-int 10))
    :width (inc (rand-int 10))})
 
 (def rectangles (repeatedly make-rectangle))
@@ -120,7 +133,8 @@
    :width (+ (:width rect1) (:width rect2))})
 
 (def wider-than-tall
-  (let [{:keys [height width]} (reduce combine-rectangles rectangles-100)]
+  (let [{:keys [height width]}
+        (reduce combine-rectangles rectangles-100)]
     (< height width)))
 
 ;; Tons more. Read core.clj
