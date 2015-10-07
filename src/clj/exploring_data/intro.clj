@@ -27,10 +27,10 @@
 
 (rest q)
 
-;; cons adds - note it doesn't change the symbol's value
-(cons 5 q)
+;; conj adds - note it doesn't change the symbol's value
+(conj q 5)
 
-(def q2 (cons 5 q))
+(def q2 (conj q 5))
 
 ;; Let's make a more interesting sequence
 (def numbers (seq [1 2 3 4 5 6 7 8 9 8 7 6 5 4 3 2 1 2 3 1 2 3]))
@@ -61,20 +61,28 @@
 
 (reduce (fn [a b] (+ a b)) numbers)
 
-(frequencies numbers)
-
 ;; Predicate functions evaluate truth. Conventionally they end in a ?
 (defn divisible-by-3? [x]
   (= 0 (mod3 x)))
 
 (filter divisible-by-3? numbers)
 
-;; Add syntax for non-divisible
 (partition 4 numbers)
 
 (partition-by divisible-by-3? numbers)
 
 ;; Make more interesting sequences
+
+(def team-members ["Kevin" "Gary" "Roberto" "Allie" "Richard" "Liz" "Sebastian" "Cedric" "Jonathan"])
+(def pairs (->> (shuffle team-members)
+                (partition 2 2 (repeat nil))
+                (reverse)))
+
+(def team-of-three (->> (take 2 pairs)
+                        (apply concat)
+                        (filter (complement nil?))))
+
+(def teams (cons team-of-three (drop 2 pairs)))
 
 (let
     [pairs (reverse (partition 2 2 (repeat nil) (shuffle  team-members)))]
